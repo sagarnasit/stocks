@@ -3,8 +3,6 @@ import Layout from "../components/layout"
 import StockList from "../components/StockList"
 import ResetButton from "../components/ResetButton";
 
-const ws = new WebSocket("ws://stocks.mnet.website");
-
 class IndexPage extends React.Component {
 
   state = {
@@ -23,12 +21,10 @@ class IndexPage extends React.Component {
   }
 
   updateStock = (newStock) => {
-    console.log(`Lenght: ${newStock.length}`);
 
     let currentTime = Date.now();
 
     newStock.map(([stkName, stkPrice]) => {
-      console.log(`Stock: ${stkPrice}`);
 
       let prevPrice;
 
@@ -46,7 +42,7 @@ class IndexPage extends React.Component {
 
   componentDidMount = () => {
 
-    ws.onopen = () => console.log("Sagar");
+    const ws = new WebSocket("ws://stocks.mnet.website");
 
     ws.onmessage = (e) => {
 
