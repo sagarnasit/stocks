@@ -1,21 +1,69 @@
 import React from "react"
-import { Link } from "gatsby"
-
 import Layout from "../components/layout"
-import Image from "../components/image"
-import SEO from "../components/seo"
+import StockList from "../components/StockList"
+import ResetButton from "../components/ResetButton";
 
-const IndexPage = () => (
-  <Layout>
-    <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-      <Image />
-    </div>
-    <Link to="/page-2/">Go to page 2</Link>
-  </Layout>
-)
+const ws = new WebSocket("ws://stocks.mnet.website");
+
+class IndexPage extends React.Component {
+
+  state = {
+    list: {}
+  }
+
+  constructor(props) {
+    super(props)
+
+    this.updateStock = this.updateStock.bind(this)
+    this.resetStocks = this.resetStocks.bind(this)
+  }
+
+  resetStocks() {
+    this.setState({ list: {} })
+  }
+
+  updateStock = (newStock) => {
+    console.log(`Lenght: ${newStock.length}`);
+
+    let currentTime = Date.now();
+
+    newStock.map(([stkName, stkPrice]) => {
+      console.log(`Stock: ${stkPrice}`);
+
+      let prevPrice;
+
+      if (this.state.list[stkName]) {
+        prevPrice = this.state.list[stkName].currentPrice;
+      }
+
+
+      this.state.list[stkName] = { currentPrice: stkPrice, prevPrice: prevPrice, lastUpdate: currentTime };
+    })
+
+    this.setState({ list: this.state.list })
+
+  }
+
+  componentDidMount = () => {
+
+    ws.onopen = () => console.log("Sagar");
+
+    ws.onmessage = (e) => {
+
+      this.updateStock(JSON.parse(e.data));
+
+    }
+  }
+
+  render() {
+    return (
+      <Layout>
+        <ResetButton resetStocks={this.resetStocks} />
+        <StockList stocks={this.state.list} />
+      </Layout>
+    )
+  }
+}
+
 
 export default IndexPage
