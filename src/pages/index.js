@@ -42,7 +42,7 @@ class IndexPage extends React.Component {
 
   componentDidMount = () => {
 
-    const ws = new WebSocket("ws://stocks.mnet.website");
+    const ws = new WebSocket("wss://stocks.mnet.website");
 
     ws.onmessage = (e) => {
 
