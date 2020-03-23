@@ -49,6 +49,9 @@ class IndexPage extends React.Component {
       this.updateStock(JSON.parse(e.data));
 
     }
+
+    // Close the connection.
+    ws.onclose = () => { this.setState({ stocks: {} }) }
   }
 
   render() {
