@@ -6,21 +6,22 @@ import ResetButton from "../components/ResetButton";
 class IndexPage extends React.Component {
 
   state = {
-    list: {}
+    stocks: {}
   }
 
   constructor(props) {
     super(props)
 
+    // bind methods with this.
     this.updateStock = this.updateStock.bind(this)
     this.resetStocks = this.resetStocks.bind(this)
   }
 
   resetStocks() {
-    this.setState({ list: {} })
+    this.setState({ stocks: {} })
   }
 
-  updateStock = (newStock) => {
+  updateStock(newStock) {
 
     let currentTime = Date.now();
 
@@ -28,15 +29,14 @@ class IndexPage extends React.Component {
 
       let prevPrice;
 
-      if (this.state.list[stkName]) {
-        prevPrice = this.state.list[stkName].currentPrice;
+      if (this.state.stocks[stkName]) {
+        prevPrice = this.state.stocks[stkName].currentPrice;
       }
 
-
-      this.state.list[stkName] = { currentPrice: stkPrice, prevPrice: prevPrice, lastUpdate: currentTime };
+      this.state.stocks[stkName] = { currentPrice: stkPrice, prevPrice: prevPrice, lastUpdate: currentTime };
     })
 
-    this.setState({ list: this.state.list })
+    this.setState({ stocks: this.state.stocks })
 
   }
 
@@ -45,7 +45,7 @@ class IndexPage extends React.Component {
     const ws = new WebSocket("wss://stocks.mnet.website");
 
     ws.onmessage = (e) => {
-
+      // Update stocks on every message.
       this.updateStock(JSON.parse(e.data));
 
     }
@@ -55,7 +55,7 @@ class IndexPage extends React.Component {
     return (
       <Layout>
         <ResetButton resetStocks={this.resetStocks} />
-        <StockList stocks={this.state.list} />
+        <StockList stocks={this.state.stocks} />
       </Layout>
     )
   }
