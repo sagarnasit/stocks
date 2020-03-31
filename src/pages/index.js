@@ -25,7 +25,7 @@ class IndexPage extends React.Component {
 
     let currentTime = Date.now();
 
-    newStock.map(([stkName, stkPrice]) => {
+    newStock.forEach(([stkName, stkPrice]) => {
 
       let prevPrice;
 
@@ -42,7 +42,7 @@ class IndexPage extends React.Component {
 
   componentDidMount = () => {
 
-    const ws = new WebSocket("wss://stocks.mnet.website");
+    const ws = new WebSocket("ws://stocks.mnet.website");
 
     ws.onmessage = (e) => {
       // Update stocks on every message.

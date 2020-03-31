@@ -27,16 +27,12 @@ const StockRow = ({ name, currentPrice, prevPrice, lastUpdate }) => {
     }
 
     return (
-        <tr >
+        <tr>
             <td>{name.toUpperCase()}</td>
             <td style={{
                 color: `${marketTrend}`
             }}
-            >
-                <span>{marketTrendArrow}&nbsp;</span>
-                {currentPrice.toFixed(2)}
-
-            </td>
+            >{marketTrendArrow}&nbsp;{currentPrice.toFixed(2)}</td>
             <td>{getLastUpdatedDate(lastUpdate)}</td>
         </tr>
     );
